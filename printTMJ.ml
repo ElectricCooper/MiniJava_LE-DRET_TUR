@@ -23,6 +23,8 @@ let binop out = function
      fprintf out "*"
   | OpLt  ->
      fprintf out "<"
+  | OpGt  ->
+     fprintf out ">"
   | OpAnd ->
      fprintf out "&&"
 
@@ -103,7 +105,7 @@ and expr5 out e = match e.raw_expression with
      expr4 out e
 
 and expr6 out e = match e.raw_expression with
-  | EBinOp ((OpLt | OpAnd) as op, e1, e2) ->
+  | EBinOp ((OpLt | OpGt | OpAnd) as op, e1, e2) ->
      fprintf out "%a %a %a"
        expr6 e1
        binop op
