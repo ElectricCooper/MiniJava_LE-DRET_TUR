@@ -8,7 +8,7 @@
 %token INTEGER BOOLEAN
 %token <string Location.t> IDENT
 %token CLASS PUBLIC STATIC VOID MAIN STRING EXTENDS RETURN
-%token PLUS MINUS TIMES NOT LT OR AND GT 
+%token PLUS MINUS TIMES DIV NOT LT OR AND GT 
 %token COMMA SEMICOLON
 %token ASSIGN
 %token LPAREN RPAREN LBRACKET RBRACKET LBRACE RBRACE
@@ -21,7 +21,7 @@
 %left AND
 %nonassoc LT GT
 %left PLUS MINUS
-%left TIMES
+%left TIMES DIV
 %nonassoc NOT
 %nonassoc DOT LBRACKET
 
@@ -145,11 +145,13 @@ raw_expression:
 %inline binop:
 | PLUS  { OpAdd }
 | MINUS { OpSub }
+| DIV   { OpDiv }
 | TIMES { OpMul }
 | LT    { OpLt }
 | GT    { OpGt }
+| OR    { OpOr }
 | AND   { OpAnd }
-| OR   { OpOr }
+
 
 instruction:
 | b = block

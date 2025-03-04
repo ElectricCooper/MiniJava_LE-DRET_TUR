@@ -29,6 +29,7 @@ and constant =
 and binop =
   | OpAdd (** Binary operator [+]. *)
   | OpSub (** Binary operator [-]. *)
+  | OpDiv (** Binary operator [/]. *)
   | OpMul (** Binary operator [*]. *)
   | OpLt  (** Binary operator [<]. *)
   | OpGt  (** Binary operator [>]. *)  

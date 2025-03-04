@@ -298,6 +298,7 @@ let binop2c
   match op with
   | OpAdd -> fprintf out "+"
   | OpSub -> fprintf out "-"
+  | OpDiv -> fprintf out "/"
   | OpMul -> fprintf out "*"
   | OpLt  -> fprintf out "<"
   | OpGt  -> fprintf out ">"  

@@ -46,6 +46,8 @@ let print_token show_loc out = function
      fprintf out "PLUS"
   | MINUS ->
      fprintf out "MINUS"
+   | DIV ->
+     fprintf out "DIV"
   | TIMES ->
      fprintf out "TIMES"
   | NOT ->
@@ -58,7 +60,6 @@ let print_token show_loc out = function
      fprintf out "OR"
   | AND ->
      fprintf out "AND"
-
   | COMMA ->
      fprintf out "COMMA"
   | SEMICOLON ->

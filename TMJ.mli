@@ -24,6 +24,7 @@ and constant = LMJ.constant =
 and binop = LMJ.binop =
   | OpAdd
   | OpSub
+  | OpDiv
   | OpMul
   | OpLt
   | OpGt  

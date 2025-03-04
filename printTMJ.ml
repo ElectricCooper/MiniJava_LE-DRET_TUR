@@ -19,6 +19,8 @@ let binop out = function
      fprintf out "+"
   | OpSub ->
      fprintf out "-"
+  | OpDiv ->
+   fprintf out "/"
   | OpMul ->
      fprintf out "*"
   | OpLt  ->
@@ -81,7 +83,7 @@ and expr2 out e = match e.raw_expression with
      expr1 out e
 
 and expr3 out e = match e.raw_expression with 
-  | EBinOp (OpMul as op, e1, e2) ->
+  | EBinOp (OpMul | OpDiv as op, e1, e2) ->
      fprintf out "%a %a %a"
        expr3 e1
        binop op

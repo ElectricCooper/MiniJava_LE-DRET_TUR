@@ -27,6 +27,7 @@ rule get_token = parse
   | "/*"      { comment lexbuf }
   | '+'       { PLUS }
   | '-'       { MINUS }
+  | '/'       { DIV }  
   | '*'       { TIMES }  
   | "||"      { OR }
   | "&&"      { AND }
