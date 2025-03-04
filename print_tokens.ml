@@ -53,9 +53,12 @@ let print_token show_loc out = function
   | LT ->
      fprintf out "LT"
    | GT ->
-   fprintf out "GT"
+   fprintf out "GT"  
+   | OR ->
+     fprintf out "OR"
   | AND ->
      fprintf out "AND"
+
   | COMMA ->
      fprintf out "COMMA"
   | SEMICOLON ->

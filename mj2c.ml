@@ -300,8 +300,10 @@ let binop2c
   | OpSub -> fprintf out "-"
   | OpMul -> fprintf out "*"
   | OpLt  -> fprintf out "<"
-  | OpGt  -> fprintf out ">"
+  | OpGt  -> fprintf out ">"  
+  | OpOr -> fprintf out "||"
   | OpAnd -> fprintf out "&&"
+
 
 (** [type2c out typ] transpiles the type [typ] to C on the output channel [out]. *)
 let type2c
