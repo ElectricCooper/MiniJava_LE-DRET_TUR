@@ -42,6 +42,8 @@ let print_token show_loc out = function
      fprintf out "EXTENDS"
   | RETURN ->
      fprintf out "RETURN"
+   |EQUALS ->
+      fprintf out "EQUALS"
   | PLUS ->
      fprintf out "PLUS"
   | MINUS ->

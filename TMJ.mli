@@ -22,6 +22,7 @@ and constant = LMJ.constant =
   | ConstInt of int32
 
 and binop = LMJ.binop =
+  | OpEq
   | OpAdd
   | OpSub
   | OpDiv

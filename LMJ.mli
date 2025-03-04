@@ -27,6 +27,7 @@ and constant =
   | ConstInt of int32 (** Integer constant [[-2^31, 2^31 - 1]]. *)
 
 and binop =
+  | OpEq (** Binary operator [==]. *)
   | OpAdd (** Binary operator [+]. *)
   | OpSub (** Binary operator [-]. *)
   | OpDiv (** Binary operator [/]. *)

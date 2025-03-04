@@ -71,6 +71,8 @@ let print_unop out = function
 
 (** [print_binop out op] prints the binary operator [op] on the output channel [out]. *)
 let print_binop out = function
+  | OpEq ->
+     fprintf out "OpEq"
   | OpAdd ->
      fprintf out "OpAdd"
   | OpSub ->

@@ -8,7 +8,7 @@
 %token INTEGER BOOLEAN
 %token <string Location.t> IDENT
 %token CLASS PUBLIC STATIC VOID MAIN STRING EXTENDS RETURN
-%token PLUS MINUS TIMES DIV NOT LT OR AND GT 
+%token PLUS MINUS TIMES DIV NOT LT OR AND GT EQUALS
 %token COMMA SEMICOLON
 %token ASSIGN
 %token LPAREN RPAREN LBRACKET RBRACKET LBRACE RBRACE
@@ -17,6 +17,7 @@
 %token IF ELSE WHILE
 %token EOF
 
+%left EQUALS
 %left OR
 %left AND
 %nonassoc LT GT
@@ -143,6 +144,7 @@ raw_expression:
    { EUnOp (UOpNot, e) }
 
 %inline binop:
+| EQUALS { OpEq }
 | PLUS  { OpAdd }
 | MINUS { OpSub }
 | DIV   { OpDiv }

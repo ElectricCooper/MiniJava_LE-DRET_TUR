@@ -296,6 +296,7 @@ let binop2c
       (op : TMJ.binop)
     : unit =
   match op with
+  | OpEq -> fprintf out "=="
   | OpAdd -> fprintf out "+"
   | OpSub -> fprintf out "-"
   | OpDiv -> fprintf out "/"

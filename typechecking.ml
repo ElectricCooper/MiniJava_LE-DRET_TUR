@@ -167,8 +167,14 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
       mke (TMJ.EUnOp (op, e')) returned
 
   | EBinOp (op, e1, e2) ->
-      let expected, returned =
-        match op with
+        let e1' = typecheck_expression cenv venv vinit instanceof e1 in
+        let e2' = typecheck_expression cenv venv vinit instanceof e2 in
+        let expected, returned =
+          match op with
+          | OpEq -> (* Allow both int and boolean *)
+              if e1'.typ = TypInt && e2'.typ = TypInt then TypInt, TypInt
+              else if e1'.typ = TypBool && e2'.typ = TypBool then TypBool, TypBool
+              else error e1 (sprintf "Type mismatch: `==` must be used with two ints or two booleans")
         | OpAdd
         | OpSub
         | OpDiv -> TypInt, TypInt
@@ -259,7 +265,9 @@ let rec typecheck_instruction (cenv : class_env) (venv : variable_env) (vinit : 
   | ISyso e ->
     let e' = typecheck_expression cenv venv vinit instanceof e in
     (match e'.typ with
-      | TypInt | TypBool -> (TMJ.ISyso e', vinit))
+      | TypInt | TypBool -> (TMJ.ISyso e', vinit)
+      |_-> failwith "Cannot print that")
+
 
 
 (** [occurences x bindings] returns the elements in [bindings] that have [x] has identifier. *)

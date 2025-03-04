@@ -15,6 +15,8 @@ let constant out = function
 
 (** [binop out op] prints the binary operator [op] on the output channel [out]. *)
 let binop out = function
+   | OpEq ->
+     fprintf out "=="
   | OpAdd ->
      fprintf out "+"
   | OpSub ->

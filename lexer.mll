@@ -25,6 +25,7 @@ rule get_token = parse
   | '\n'      { newline lexbuf; get_token lexbuf }
   | space+    { get_token lexbuf }
   | "/*"      { comment lexbuf }
+  | "=="       { EQUALS }
   | '+'       { PLUS }
   | '-'       { MINUS }
   | '/'       { DIV }  

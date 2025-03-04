@@ -8,6 +8,8 @@ class My_Test {
 
         // System.out.println(10/2);
 
-        System.out.println(true);
+        // System.out.println(true);
+
+        System.out.println(true==false);
     }
 }

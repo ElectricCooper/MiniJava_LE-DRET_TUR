@@ -96,9 +96,9 @@ let () =
     (** [translate_program] is used to get rid of the position informations.
         We don't need them after the typechecking phase. *)
     let output = open_out !ofile in
-    Printf.fprintf output "/*\n";
+    (* Printf.fprintf output "/*\n";
     PrintTMJ.print_program output tmj;
-    Printf.fprintf output "*/\n";
+    Printf.fprintf output "*/\n"; *)
     Mj2c.program2c output tmj;
     close_out output;
     match
