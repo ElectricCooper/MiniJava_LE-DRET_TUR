@@ -6,6 +6,8 @@ class My_Test {
         // if(false || true) System.out.println(3);
         // else System.out.println(4);
 
-        System.out.println(10/2);
+        // System.out.println(10/2);
+
+        System.out.println(true);
     }
 }

@@ -1,7 +1,7 @@
 /*
 class My_Test {
   public static void main(String[] a) {
-    System.out.println(10 / 3);
+    System.out.println(true);
   }
 }
 */
@@ -14,7 +14,7 @@ struct array { int* array; int length; };
 tgc_t gc;
 int main(int argc, char *argv[]) {
   tgc_start(&gc, &argc);
-  printf("%d\n", (10 / 3));
+  if(1) printf("true\n"); else printf("false\n"); 
   tgc_stop(&gc);
 
   return 0;
