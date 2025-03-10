@@ -1,6 +1,6 @@
 class My_Test {
     public static void main(String[] a) {
-        // if(2>1) System.out.println(1);
+        //if(2>1) System.out.println(1);
         // else System.out.println(2);
 
         // if(false || true) System.out.println(3);
@@ -10,6 +10,8 @@ class My_Test {
 
         // System.out.println(true);
 
-        System.out.println(true==false);
+        //System.out.println(true==false);
+
+        //if(2>1) System.out.println(1);
     }
 }

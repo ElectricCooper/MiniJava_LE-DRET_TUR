@@ -7,7 +7,7 @@ struct array { int* array; int length; };
 tgc_t gc;
 int main(int argc, char *argv[]) {
   tgc_start(&gc, &argc);
-  if((1 == 0)) printf("true\n"); else printf("false\n"); 
+  if ((2 > 1)) printf("%d\n", 1);
   tgc_stop(&gc);
 
   return 0;
