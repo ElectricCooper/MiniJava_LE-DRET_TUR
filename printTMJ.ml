@@ -167,6 +167,10 @@ let rec instr out = function
    (fun out b ->
       let f = instr2c method_name class_info in
       f out b) body
+   | IDoWhile (i, c) ->
+   fprintf out "do %a while (%a)"
+      instr i
+      expr c
   | IBlock is ->
      fprintf out "{%a%t}"
        (indent indentation (sep_list nl instr)) is

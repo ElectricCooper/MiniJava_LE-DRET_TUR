@@ -82,3 +82,22 @@ git checkout master
 make
 ```
 
+
+
+### List of our additions
+
+[X] Standalone if
+[X] Equals (==) operator
+[X] Boolean for SYSO
+[X] Division (/) Operator
+[X] Do While
+
+[ ] For
+
+[ ] Type String
+[ ] Concatenation of two String objects
+[ ] Type float
+[ ] Multiple instructions in main
+[ ] Declaration and initialization at the same time
+[ ] Declaration of an object in a block
+

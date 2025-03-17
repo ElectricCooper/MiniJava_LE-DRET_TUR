@@ -493,6 +493,11 @@ let instr2c
       | None -> fprintf out "") incr_opt
     (fun out b -> instr2c out b) body
 
+    | IDoWhile (i, c) ->
+    fprintf out "do %a while (%a);"
+      instr2c i
+      (expr2c method_name class_info) c
+
     | IBlock is ->
        fprintf out "{%a%t}"
          (indent indentation (sep_list nl instr2c)) is

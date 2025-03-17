@@ -14,7 +14,7 @@
 %token LPAREN RPAREN LBRACKET RBRACKET LBRACE RBRACE
 %token THIS NEW DOT LENGTH
 %token SYSO
-%token IF ELSE WHILE FOR
+%token IF ELSE WHILE FOR DO
 %token EOF
 
 %nonassoc NOELSE
@@ -186,6 +186,9 @@ instruction:
             incr = option(expr_pair) RPAREN 
             body = instruction
     { IFor(init, cond, incr, body) }
+
+| DO i = instruction WHILE LPAREN c = expression RPAREN SEMICOLON
+   { IDoWhile (i, c) }
 
 block:
 | LBRACE is = list(instruction) RBRACE
