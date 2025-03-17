@@ -14,9 +14,11 @@
 %token LPAREN RPAREN LBRACKET RBRACKET LBRACE RBRACE
 %token THIS NEW DOT LENGTH
 %token SYSO
-%token IF ELSE WHILE
+%token IF ELSE WHILE FOR
 %token EOF
 
+%nonassoc NOELSE
+%nonassoc ELSE 
 %left EQUALS
 %left OR
 %left AND
@@ -154,6 +156,8 @@ raw_expression:
 | OR    { OpOr }
 | AND   { OpAnd }
 
+expr_pair:
+  | e1 = expression ASSIGN e2 = expression { (e1, e2) }
 
 instruction:
 | b = block
@@ -171,11 +175,17 @@ instruction:
 | IF LPAREN c = expression RPAREN i1 = instruction ELSE i2 = instruction
    { IIf (c, i1, i2) }
 
-| IF LPAREN c = expression RPAREN i = instruction
+| IF LPAREN c = expression RPAREN i = instruction %prec NOELSE
    { IIfS (c, i) }
 
 | WHILE LPAREN c = expression RPAREN i = instruction
    { IWhile (c, i) }
+
+| FOR LPAREN init = option(expr_pair) SEMICOLON
+            cond = expression SEMICOLON 
+            incr = option(expr_pair) RPAREN 
+            body = instruction
+    { IFor(init, cond, incr, body) }
 
 block:
 | LBRACE is = list(instruction) RBRACE

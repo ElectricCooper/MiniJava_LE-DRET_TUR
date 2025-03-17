@@ -13,5 +13,17 @@ class My_Test {
         //System.out.println(true==false);
 
         //if(2>1) System.out.println(1);
+        
+        System.out.println(new Test().run());
+    }
+}
+
+class Test{
+    public int run() {
+        int i;
+        for(i=0;i<5;i=i+1) {
+            System.out.println(i);
+        }
+        return 0;
     }
 }

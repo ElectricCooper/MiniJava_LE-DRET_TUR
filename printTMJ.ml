@@ -148,6 +148,25 @@ let rec instr out = function
       fprintf out "while (%a) %a"
         expr c
         instr i
+   | IFor (init_opt, cond, incr_opt, body) ->
+   fprintf out "for (%a; %a; %a) %a"
+   (fun out -> function
+      | Some (e1, e2) ->
+         fprintf out "%a = %a"
+         (expr2c method_name class_info) e1
+         (expr2c method_name class_info) e2
+      | None -> fprintf out "") init_opt
+   (expr2c method_name class_info) cond
+   (fun out -> function
+      | Some (e1, e2) ->
+         fprintf out "%a = %a"
+         (expr2c method_name class_info) e1
+         (expr2c method_name class_info) e2
+      | None -> fprintf out "") incr_opt
+
+   (fun out b ->
+      let f = instr2c method_name class_info in
+      f out b) body
   | IBlock is ->
      fprintf out "{%a%t}"
        (indent indentation (sep_list nl instr)) is

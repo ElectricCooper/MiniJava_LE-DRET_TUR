@@ -475,6 +475,23 @@ let instr2c
        fprintf out "while (%a) %a"
          (expr2c method_name class_info) c
          instr2c i
+         
+    | IFor (init_opt, cond, incr_opt, body) ->
+    fprintf out "for (%a; %a; %a) %a"
+    (fun out -> function
+      | Some (e1, e2) ->
+          fprintf out "%a = %a"
+          (fun out e -> expr2c method_name class_info out e) e1
+          (fun out e -> expr2c method_name class_info out e) e2
+      | None -> fprintf out "") init_opt
+    (fun out c -> expr2c method_name class_info out c) cond
+    (fun out -> function
+      | Some (e1, e2) ->
+          fprintf out "%a = %a"
+          (fun out e -> expr2c method_name class_info out e) e1
+          (fun out e -> expr2c method_name class_info out e) e2
+      | None -> fprintf out "") incr_opt
+    (fun out b -> instr2c out b) body
 
     | IBlock is ->
        fprintf out "{%a%t}"

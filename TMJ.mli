@@ -40,6 +40,7 @@ and instruction =
   | IIf of expression * instruction * instruction
   | IIfS of expression * instruction
   | IWhile of expression * instruction
+  | IFor of (expression*expression) option * expression * (expression * expression) option * instruction
   | ISyso of expression
   | ISetVar of identifier * typ * expression
   | IArraySet of identifier * expression * expression

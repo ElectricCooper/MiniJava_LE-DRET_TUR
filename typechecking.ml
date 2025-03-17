@@ -269,6 +269,29 @@ let rec typecheck_instruction (cenv : class_env) (venv : variable_env) (vinit : 
       let ibody', vinit = typecheck_instruction cenv venv vinit instanceof ibody in
       (TMJ.IWhile (cond', ibody'), vinit)
 
+  | IFor (init_opt, cond, incr_opt, ibody) ->
+    let init_opt', vinit' = match init_opt with
+    | Some (e1, e2) ->
+        let vinit_updated = match Location.content e1 with
+          | EGetVar v -> S.add (Location.content v) vinit
+          | _ -> vinit
+        in
+        let e1' = typecheck_expression cenv venv vinit_updated instanceof e1 in
+        let e2' = typecheck_expression cenv venv vinit_updated instanceof e2 in
+        (Some (e1', e2'), vinit_updated)
+    | None -> (None, vinit)
+    in
+    let cond' = typecheck_expression_expecting cenv venv vinit' instanceof TypBool cond in
+    let incr_opt' = match incr_opt with
+      | Some (e1, e2) ->
+          let e1' = typecheck_expression cenv venv vinit' instanceof e1 in
+          let e2' = typecheck_expression cenv venv vinit' instanceof e2 in
+          Some (e1', e2')
+      | None -> None
+    in
+    let ibody', vinit'' = typecheck_instruction cenv venv vinit' instanceof ibody in
+    (TMJ.IFor (init_opt', cond', incr_opt', ibody'), vinit'')
+
   | ISyso e ->
     let e' = typecheck_expression cenv venv vinit instanceof e in
     (match e'.typ with
