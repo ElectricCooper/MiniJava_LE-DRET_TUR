@@ -16,21 +16,22 @@ class My_Test {
 
         //if(2>1) System.out.println(1);
         
-        System.out.println(new Test().run());
+        // System.out.println(new TestFor().run());
+
+        // System.out.println(new TestWhile().run());
+
+        // System.out.println(new TestDoWhile().run());
+
     }
 }
 
-class Test{
+class TestFor{
     public int run() {
         int i;
         for(i=0;i<5;i=i+1) {
             System.out.println(i);
         }
         return 0;
-        
-        //System.out.println(new TestWhile().run());
-
-        System.out.println(new TestDoWhile().run());
     }
 }
 
