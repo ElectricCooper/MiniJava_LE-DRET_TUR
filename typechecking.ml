@@ -269,6 +269,11 @@ let rec typecheck_instruction (cenv : class_env) (venv : variable_env) (vinit : 
       let ibody', vinit = typecheck_instruction cenv venv vinit instanceof ibody in
       (TMJ.IWhile (cond', ibody'), vinit)
 
+  | IDoWhile (ibody, cond) ->
+    let ibody', vinit = typecheck_instruction cenv venv vinit instanceof ibody in
+    let cond' = typecheck_expression_expecting cenv venv vinit instanceof TypBool cond in
+    (TMJ.IDoWhile (ibody', cond'), vinit)
+
   | ISyso e ->
     let e' = typecheck_expression cenv venv vinit instanceof e in
     (match e'.typ with
