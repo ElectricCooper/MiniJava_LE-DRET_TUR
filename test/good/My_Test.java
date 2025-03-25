@@ -22,6 +22,14 @@ class My_Test {
 
         // System.out.println(new TestDoWhile().run());
 
+        System.out.println(new TestString().run());
+    }
+}
+
+class TestString{
+    public string run() {
+        string s = "Hello World";
+        return s;
     }
 }
 

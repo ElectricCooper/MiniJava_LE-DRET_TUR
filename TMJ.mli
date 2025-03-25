@@ -20,6 +20,7 @@ and raw_expression =
 and constant = LMJ.constant =
   | ConstBool of bool
   | ConstInt of int32
+  | ConstString of string
 
 and binop = LMJ.binop =
   | OpEq
@@ -48,8 +49,10 @@ and instruction =
 
 and typ =
   | TypInt
+  | TypString
   | TypBool
   | TypIntArray
+  | TypStringArray
   | Typ of identifier
 
 and metho = {

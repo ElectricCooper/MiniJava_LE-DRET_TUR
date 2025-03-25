@@ -16,6 +16,8 @@
 
 let digit = ['0'-'9']
 let integer = digit+
+let string_char = [^ '"' '\\' '\n'] | ('\\' ['n' 't' 'r' '\\' '"'])
+let string = '"' string_char* '"'
 let space = [' ' '\t' '\r']
 let letter = ['a'-'z''A'-'Z''_']
 let ident = letter (digit | letter)*
@@ -47,6 +49,7 @@ rule get_token = parse
   | "true"    { BOOL_CONST true }
   | "false"   { BOOL_CONST false }
   | "int"     { INTEGER }
+  | "string"  { STRING }
   | "boolean" { BOOLEAN }
   | "!"       { NOT }
   | ","       { COMMA }
@@ -76,6 +79,12 @@ rule get_token = parse
         with Failure _ ->
           raise (Error "Invalid integer constant")
       }
+  | string as s
+  {
+    (* Remove the surrounding quotes and handle escape sequences *)
+    let content = String.sub s 1 (String.length s - 2) in
+    STRING_CONST content
+  }
   | ident as id { IDENT (Location.make (lexeme_start_p lexbuf) (lexeme_end_p lexbuf) id) }
   | "//" [^ '\n']* eof
   | eof     { EOF }

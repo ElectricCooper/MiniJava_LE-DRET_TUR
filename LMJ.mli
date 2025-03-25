@@ -19,12 +19,14 @@ and raw_expression =
   | EArrayGet of expression * expression (** [EArrayGet (e1, e2)] represents the expression [e1[e2]]. *)
   | EArrayAlloc of expression (** [EArrayAlloc e] represents the expression [new int[e]]. *)
   | EArrayLength of expression (** [EArrayLength e] represents the expression [e.length]. *)
+  | EStringArrayAlloc of expression 
   | EThis (** [EThis] represents the expression [this]. *)
   | EObjectAlloc of identifier (** [EObjectAlloc id] represents the expression [new id()]. *)
 
 and constant =
   | ConstBool of bool (** Boolean constant [true] or [false]. *)
   | ConstInt of int32 (** Integer constant [[-2^31, 2^31 - 1]]. *)
+  | ConstString of string (** String constant. *)
 
 and binop =
   | OpEq (** Binary operator [==]. *)
@@ -54,8 +56,10 @@ and instruction =
 
 and typ =
   | TypInt (** Type [int]. *)
+  | TypString (** Type [string]*)
   | TypBool (** Type [bool]. *)
   | TypIntArray (** Type [int[]]. *)
+  | TypStringArray (** Type [string[]]*)
   | Typ of identifier (** A class type. *)
 
 and metho = {

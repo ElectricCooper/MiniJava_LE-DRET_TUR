@@ -289,6 +289,7 @@ let constant2c
   | ConstBool true  -> fprintf out "1"
   | ConstBool false -> fprintf out "0"
   | ConstInt i      -> fprintf out "%ld" i
+  | ConstString s   -> fprintf out "\"%s\"" s
 
 (** [binop2c out op] transpiles the binary operator [op] to C on the output channel [out]. *)
 let binop2c
@@ -314,8 +315,10 @@ let type2c
     : unit =
   match typ with
   | TypInt -> fprintf out "int"
+  | TypString -> fprintf out "char*"
   | TypBool -> fprintf out "int"
   | TypIntArray -> fprintf out "struct %s*" !struct_array_name
+  | TypStringArray -> fprintf  out "struct %s*" !struct_array_name
   | Typ t -> fprintf out "struct %s*" t
 
 (** [cast out typ] transpiles the cast to [typ] to C on the output channel [out]. *)
@@ -505,6 +508,8 @@ let instr2c
 
     | ISyso e -> match e.typ with
       | TypInt -> fprintf out "printf(\"%%d\\n\", %a);"
+         (expr2c method_name class_info) e
+      | TypString -> fprintf out "printf(\"%%s\\n\", %a);" 
          (expr2c method_name class_info) e
       | TypBool -> fprintf out "if(%a) printf(\"true\\n\"); else printf(\"false\\n\"); " (expr2c method_name class_info) e
       |_-> failwith "Cannot print that"

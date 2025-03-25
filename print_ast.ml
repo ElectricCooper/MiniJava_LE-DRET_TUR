@@ -63,6 +63,8 @@ let print_constant out = function
      fprintf out "ConstBool %s" (string_of_bool b)
   | ConstInt i ->
      fprintf out "ConstInt %ld" i
+  | ConstString s ->
+    fprintf out "ConstString %s" s
 
 (** [print_unop out op] prints the unary operator [op] on the output channel [out]. *)
 let print_unop out = function
@@ -278,10 +280,14 @@ let print_type out typ =
   match typ with
   | TypInt ->
      fprintf out "int"
+  | TypString ->
+     fprintf out "string"
   | TypBool ->
      fprintf out "bool"
   | TypIntArray ->
      fprintf out "int[]"
+  | TypStringArray ->
+     fprintf out "string[]"
   | Typ id ->
      fprintf out "%a" print_identifier id
 
