@@ -30,8 +30,12 @@ void* (*TestFor_vtable[])() = { TestFor_run };
 void* (*TestWhile_vtable[])() = { TestWhile_run };
 void* (*TestDoWhile_vtable[])() = { TestDoWhile_run };
 void* TestString_run(struct TestString* this) {
+  char* s1;
+  char* s2;
   char* s;
-  s = "Hello World";
+  s1 = "Hello ";
+  s2 = "World";
+  s = ({ char* tmp1 = s1; char* tmp2 = s2; char* result = malloc(strlen(tmp1) + strlen(tmp2) + 1); strcpy(result, tmp1); strcat(result, tmp2); result; });
   return (void*)(s);
 }
 void* TestFor_run(struct TestFor* this) {

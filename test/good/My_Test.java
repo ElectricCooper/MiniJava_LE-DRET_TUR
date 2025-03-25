@@ -28,7 +28,9 @@ class My_Test {
 
 class TestString{
     public string run() {
-        string s = "Hello World";
+        string s1 = "Hello ";
+        string s2 = "World";
+        string s = s1 + s2;
         return s;
     }
 }

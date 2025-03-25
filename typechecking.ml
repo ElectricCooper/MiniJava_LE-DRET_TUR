@@ -182,11 +182,14 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
         let e2' = typecheck_expression cenv venv vinit instanceof e2 in
         let expected, returned =
           match op with
-          | OpEq -> (* Allow both int and boolean *)
+          | OpEq -> 
               if e1'.typ = TypInt && e2'.typ = TypInt then TypInt, TypInt
               else if e1'.typ = TypBool && e2'.typ = TypBool then TypBool, TypBool
               else error e1 (sprintf "Type mismatch: `==` must be used with two ints or two booleans")
-        | OpAdd
+        | OpAdd -> 
+          if e1'.typ = TypString && e2'.typ = TypString then TypString, TypString
+          else if e1'.typ = TypInt && e2'.typ = TypInt then TypInt, TypInt
+          else error e1 (sprintf "Type mismatch: `+` must be used with two ints or two strings")
         | OpSub
         | OpDiv -> TypInt, TypInt
         | OpMul -> TypInt, TypInt

@@ -429,12 +429,25 @@ let expr2c
     | EUnOp (UOpNot, e) ->
        fprintf out "!(%a)"
          expr2c e
-
+         
     | EBinOp (op, e1, e2) ->
-       fprintf out "(%a %a %a)"
-         expr2c e1
-         binop2c op
-         expr2c e2
+    if op = OpAdd && e1.typ = TypString && e2.typ = TypString then
+      (* String concatenation *)
+      fprintf out "({ char* %s = %a; char* %s = %a; \
+                    char* result = malloc(strlen(%s) + strlen(%s) + 1); \
+                    strcpy(result, %s); \
+                    strcat(result, %s); \
+                    result; })"
+        !name1 expr2c e1
+        !name2 expr2c e2
+        !name1 !name2
+        !name1
+        !name2
+    else
+      fprintf out "(%a %a %a)"
+        expr2c e1
+        binop2c op
+        expr2c e2
   in
   expr2c out expr
 
