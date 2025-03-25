@@ -102,6 +102,11 @@ declarations_and_statements:
      let d, s = r in
      ((id, t) :: d, s)
    }
+| t = typ id = IDENT ASSIGN e = expression SEMICOLON r = declarations_and_statements
+   {
+     let d, s = r in
+     ((id, t) :: d, ISetVar(id, e) :: s)
+   }
 | s = list(instruction)
    { ([], s) }
 
