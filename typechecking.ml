@@ -214,14 +214,14 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
   | EArrayAlloc elength ->
       let elength' = typecheck_expression_expecting cenv venv vinit instanceof TypInt elength in
       mke (TMJ.EArrayAlloc elength') TypIntArray
+  
+  | EStringArrayAlloc estringlength ->
+    let estringlength' = typecheck_expression_expecting cenv venv vinit instanceof TypString estringlength in
+    mke (TMJ.EArrayAlloc estringlength') TypStringArray
 
   | EArrayLength earray ->
       let earray' = typecheck_expression_expecting cenv venv vinit instanceof TypIntArray earray in
       mke (TMJ.EArrayLength earray') TypInt
-  
-  | EStringArrayAlloc estringarray ->
-      let estringarray' = typecheck_expression_expecting cenv venv vinit instanceof TypStringArray estringarray in
-      mke (TMJ.EArrayLength estringarray') TypString
 
   | EThis ->
      mke TMJ.EThis (vlookup (Location.make (Location.startpos e) (Location.endpos e) "this") venv)
