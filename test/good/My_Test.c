@@ -7,16 +7,21 @@ struct array { int* array; int length; };
 tgc_t gc;
 struct TestString;
 struct TestFor;
+struct TestFloat;
 struct TestWhile;
 struct TestDoWhile;
 void* TestString_run(struct TestString* this);
 void* TestFor_run(struct TestFor* this);
+void* TestFloat_run(struct TestFloat* this);
 void* TestWhile_run(struct TestWhile* this);
 void* TestDoWhile_run(struct TestDoWhile* this);
 struct TestString {
   void* (**vtable)();
 };
 struct TestFor {
+  void* (**vtable)();
+};
+struct TestFloat {
   void* (**vtable)();
 };
 struct TestWhile {
@@ -27,6 +32,7 @@ struct TestDoWhile {
 };
 void* (*TestString_vtable[])() = { TestString_run };
 void* (*TestFor_vtable[])() = { TestFor_run };
+void* (*TestFloat_vtable[])() = { TestFloat_run };
 void* (*TestWhile_vtable[])() = { TestWhile_run };
 void* (*TestDoWhile_vtable[])() = { TestDoWhile_run };
 void* TestString_run(struct TestString* this) {
@@ -43,6 +49,13 @@ void* TestFor_run(struct TestFor* this) {
   for (i = 0; (i < 5); i = (i + 1)) {
     printf("%d\n", i);
   }
+  return (void*)(0);
+}
+void* TestFloat_run(struct TestFloat* this) {
+  float i;
+  i = 5.400000;
+  printf("%f\n", 3.556756);
+  printf("%f\n", i);
   return (void*)(0);
 }
 void* TestWhile_run(struct TestWhile* this) {
@@ -70,7 +83,7 @@ void* TestDoWhile_run(struct TestDoWhile* this) {
 int main(int argc, char *argv[]) {
   tgc_start(&gc, &argc);
   {
-    printf("%s\n", ({ struct TestString* tmp1 = ({ struct TestString* res = tgc_calloc(({ extern tgc_t gc; &gc; }), 1, sizeof(*res)); res->vtable = TestString_vtable; res; }); (char*) tmp1->vtable[0](tmp1); }));
+    printf("%d\n", ({ struct TestFloat* tmp1 = ({ struct TestFloat* res = tgc_calloc(({ extern tgc_t gc; &gc; }), 1, sizeof(*res)); res->vtable = TestFloat_vtable; res; }); (int) tmp1->vtable[0](tmp1); }));
   }
   tgc_stop(&gc);
 

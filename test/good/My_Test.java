@@ -49,9 +49,9 @@ class TestFor{
 
 class TestFloat{
     public int run() {
-        System.out.println(3.5f);
         float i;
         i = 5.4f;
+        System.out.println(3.5567564f);
         System.out.println(i);
         return 0;
     }

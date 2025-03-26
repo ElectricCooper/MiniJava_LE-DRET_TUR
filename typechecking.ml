@@ -329,7 +329,7 @@ let rec typecheck_instruction (cenv : class_env) (venv : variable_env) (vinit : 
   | ISyso e ->
     let e' = typecheck_expression cenv venv vinit instanceof e in
     (match e'.typ with
-      | TypInt | TypBool | TypString -> (TMJ.ISyso e', vinit)
+      | TypInt | TypBool | TypString | TypFloat -> (TMJ.ISyso e', vinit)
       |_-> failwith "Cannot print that")
 
 

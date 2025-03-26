@@ -52,6 +52,7 @@ rule get_token = parse
   | "true"    { BOOL_CONST true }
   | "false"   { BOOL_CONST false }
   | "int"     { INTEGER }
+  | "float"   { FLOAT }
   | "string"  { STRING }
   | "boolean" { BOOLEAN }
   | "!"       { NOT }
