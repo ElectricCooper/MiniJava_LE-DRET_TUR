@@ -122,6 +122,9 @@ raw_expression:
 | i = INT_CONST
    { EConst (ConstInt i) }
 
+| f = FLOAT_CONST
+   { EConst (ConstFloat f) }
+
 | s = STRING_CONST
    { EConst (ConstString s)}
 

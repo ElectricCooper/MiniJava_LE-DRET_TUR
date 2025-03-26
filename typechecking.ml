@@ -197,6 +197,7 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
               else if e1'.typ = TypFloat && e2'.typ = TypFloat then TypFloat, TypFloat
               else if e1'.typ = TypBool && e2'.typ = TypBool then TypBool, TypBool
               else error e1 (sprintf "Type mismatch: `==` must be used with two ints or two booleans")
+              
         | OpAdd -> 
           if e1'.typ = TypString && e2'.typ = TypString then TypString, TypString
           else if e1'.typ = TypInt && e2'.typ = TypInt then TypInt, TypInt
@@ -206,6 +207,7 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
         | OpMul -> TypInt, TypInt
         | OpLt  -> TypInt, TypBool
         | OpGt  -> TypInt, TypBool
+
         | OpOr -> TypBool, TypBool
         | OpAnd -> TypBool, TypBool
 

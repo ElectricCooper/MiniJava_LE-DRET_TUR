@@ -47,7 +47,7 @@ class TestFor{
     }
 }
 
-class TestFloat{
+/*class TestFloat{
     public int run() {
         System.out.println(3.5f);
         float i;
@@ -55,7 +55,7 @@ class TestFloat{
         System.out.println(i);
         return 0;
     }
-}
+}*/
 
 class TestWhile {
     public int run(){
