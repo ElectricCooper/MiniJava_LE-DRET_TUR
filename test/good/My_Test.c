@@ -55,11 +55,11 @@ void* TestFloat_run(struct TestFloat* this) {
   float f1;
   float f2;
   float f;
-  f1 = 6.800000;
-  f2 = 2.400000;
+  f1 = 6.800000f;
+  f2 = 2.400000f;
   f = (f1 * f2);
   if((f1 > f2)) printf("true\n"); else printf("false\n"); 
-  return (void*)(0);
+  { float f_val = f; int* i_ptr = (int*)&f_val; return (void*)(*i_ptr); }
 }
 void* TestWhile_run(struct TestWhile* this) {
   int j;
@@ -70,7 +70,7 @@ void* TestWhile_run(struct TestWhile* this) {
     printf("%d\n", j);
     j = (j + 1);
   }
-  return (void*)(0);
+  return (void*)(5);
 }
 void* TestDoWhile_run(struct TestDoWhile* this) {
   int j;
@@ -86,7 +86,7 @@ void* TestDoWhile_run(struct TestDoWhile* this) {
 int main(int argc, char *argv[]) {
   tgc_start(&gc, &argc);
   {
-    printf("%d\n", ({ struct TestFloat* tmp1 = ({ struct TestFloat* res = tgc_calloc(({ extern tgc_t gc; &gc; }), 1, sizeof(*res)); res->vtable = TestFloat_vtable; res; }); (int) tmp1->vtable[0](tmp1); }));
+    printf("%f\n", ({ struct TestFloat* tmp1 = ({ struct TestFloat* res = tgc_calloc(({ extern tgc_t gc; &gc; }), 1, sizeof(*res)); res->vtable = TestFloat_vtable; res; }); int i_val = (int)tmp1->vtable[0](tmp1); float f_val; *((int*)&f_val) = i_val; f_val; }));
   }
   tgc_stop(&gc);
 

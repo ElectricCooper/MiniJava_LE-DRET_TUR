@@ -48,13 +48,13 @@ class TestFor{
 }
 
 class TestFloat{
-    public int run() {
+    public float run() {
         float f1 = 6.8f;
         float f2 = 2.4f;
         float f;
         f = f1 * f2;
         System.out.println(f1 > f2);
-        return 0;
+        return f;
     }
 }
 
@@ -68,7 +68,7 @@ class TestWhile {
 	    System.out.println(j);
 	    j = j + 1 ;
 	    }
-        return 0;
+        return 5;
     }
     
 }
