@@ -199,12 +199,14 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
           if e1'.typ = TypString && e2'.typ = TypString then TypString, TypString
           else if e1'.typ = TypInt && e2'.typ = TypInt then TypInt, TypInt
           else if e1'.typ = TypFloat && e2'.typ = TypFloat then TypFloat, TypFloat
-          else error e1 (sprintf "Type mismatch: `+` must be used with two ints or two strings")
-        | OpSub
-        | OpDiv -> TypInt, TypInt
-        | OpMul -> TypInt, TypInt
-        | OpLt  -> TypInt, TypBool
-        | OpGt  -> TypInt, TypBool
+          else error e1 (sprintf "Type mismatch: `+` must be used with two ints or two strings or two floats")
+        | OpSub | OpDiv| OpMul -> if e1'.typ = TypInt && e2'.typ = TypInt then TypInt, TypInt
+        else if e1'.typ = TypFloat && e2'.typ = TypFloat then TypFloat, TypFloat
+        else error e1 (sprintf "Type mismatch: `+` must be used with two ints or two floats")
+        | OpLt  
+        | OpGt  -> if e1'.typ = TypInt && e2'.typ = TypInt then TypInt, TypBool
+        else if e1'.typ = TypFloat && e2'.typ = TypFloat then TypFloat, TypBool
+        else error e1 (sprintf "Type mismatch: `+` must be used with two ints or two floats")
 
         | OpOr -> TypBool, TypBool
         | OpAnd -> TypBool, TypBool

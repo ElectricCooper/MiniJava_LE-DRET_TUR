@@ -49,10 +49,11 @@ class TestFor{
 
 class TestFloat{
     public int run() {
-        float i;
-        i = 5.4f;
-        System.out.println(3.5567564f);
-        System.out.println(i);
+        float f1 = 6.8f;
+        float f2 = 2.4f;
+        float f;
+        f = f1 * f2;
+        System.out.println(f1 > f2);
         return 0;
     }
 }
