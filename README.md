@@ -92,11 +92,13 @@ make
 [X] Division (/) Operator
 [X] Do While
 [X] For
+[X] Type String
+[X] Concatenation of two String objects
+[X] Type float
+[X] Multiple instructions in main
+[X] Declaration and initialization at the same time
 
-[ ] Type String
-[ ] Concatenation of two String objects
-[ ] Type float
-[ ] Multiple instructions in main
-[ ] Declaration and initialization at the same time
+[ ] If _ Then _ Else
+[ ] Declaration in main
 [ ] Declaration of an object in a block
 
