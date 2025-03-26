@@ -20,6 +20,9 @@ let space = [' ' '\t' '\r']
 let letter = ['a'-'z''A'-'Z''_']
 let ident = letter (digit | letter)*
 
+(* Define a rule for floating-point numbers *)
+let float = integer '.' integer 'f'
+
 rule get_token = parse
   | "//" [^ '\n']* '\n'
   | '\n'      { newline lexbuf; get_token lexbuf }
@@ -28,8 +31,8 @@ rule get_token = parse
   | "=="       { EQUALS }
   | '+'       { PLUS }
   | '-'       { MINUS }
-  | '/'       { DIV }  
-  | '*'       { TIMES }  
+  | '/'       { DIV }
+  | '*'       { TIMES }
   | "||"      { OR }
   | "&&"      { AND }
   | "<"       { LT }
@@ -75,6 +78,13 @@ rule get_token = parse
           INT_CONST (Int32.of_string i)
         with Failure _ ->
           raise (Error "Invalid integer constant")
+      }
+  | float as f
+      {
+        try
+          FLOAT_CONST (float_of_string f)
+        with Failure _ ->
+          raise (Error "Invalid float constant")
       }
   | ident as id { IDENT (Location.make (lexeme_start_p lexbuf) (lexeme_end_p lexbuf) id) }
   | "//" [^ '\n']* eof

@@ -91,8 +91,7 @@ make
 [X] Boolean for SYSO
 [X] Division (/) Operator
 [X] Do While
-
-[ ] For
+[X] For
 
 [ ] Type String
 [ ] Concatenation of two String objects

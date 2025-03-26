@@ -22,6 +22,7 @@ class My_Test {
 
         // System.out.println(new TestDoWhile().run());
 
+        System.out.println(new TestFloat().run());
     }
 }
 
@@ -31,6 +32,16 @@ class TestFor{
         for(i=0;i<5;i=i+1) {
             System.out.println(i);
         }
+        return 0;
+    }
+}
+
+class TestFloat{
+    public int run() {
+        System.out.println(3.5f);
+        float i;
+        i = 5.4f;
+        System.out.println(i);
         return 0;
     }
 }
