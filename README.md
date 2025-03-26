@@ -97,6 +97,7 @@ make
 [X] Type float
 [X] Multiple instructions in main
 [X] Declaration and initialization at the same time
+[X] Operations for float
 
 [ ] If _ Then _ Else
 [ ] Declaration in main
