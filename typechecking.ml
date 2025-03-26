@@ -169,9 +169,6 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
   | EConst (ConstFloat f) ->
     mke (TMJ.EConst (ConstFloat f)) TypFloat
 
-  | EConst (ConstFloat f) ->
-    mke (TMJ.EConst (ConstFloat f)) TypFloat
-
   | EGetVar v ->
      let typ = vlookup v venv in
      let v' = Location.content v in
@@ -197,10 +194,11 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
               else if e1'.typ = TypFloat && e2'.typ = TypFloat then TypFloat, TypFloat
               else if e1'.typ = TypBool && e2'.typ = TypBool then TypBool, TypBool
               else error e1 (sprintf "Type mismatch: `==` must be used with two ints or two booleans")
-              
+
         | OpAdd -> 
           if e1'.typ = TypString && e2'.typ = TypString then TypString, TypString
           else if e1'.typ = TypInt && e2'.typ = TypInt then TypInt, TypInt
+          else if e1'.typ = TypFloat && e2'.typ = TypFloat then TypFloat, TypFloat
           else error e1 (sprintf "Type mismatch: `+` must be used with two ints or two strings")
         | OpSub
         | OpDiv -> TypInt, TypInt

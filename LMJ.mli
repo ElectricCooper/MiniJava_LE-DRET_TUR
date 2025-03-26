@@ -27,7 +27,7 @@ and constant =
   | ConstBool of bool (** Boolean constant [true] or [false]. *)
   | ConstInt of int32 (** Integer constant [[-2^31, 2^31 - 1]]. *)
   | ConstString of string (** String constant. *)
-  | ConstFloat of float (** Float constant TODO. *)
+  | ConstFloat of float (** Float constant. *)
 
 and binop =
   | OpEq (** Binary operator [==]. *)

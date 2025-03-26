@@ -23,7 +23,7 @@ let letter = ['a'-'z''A'-'Z''_']
 let ident = letter (digit | letter)*
 
 (* Define a rule for floating-point numbers *)
-let float = integer '.' integer 'f'
+let float = ( digit+ '.' digit* | digit* '.' digit+ )
 
 rule get_token = parse
   | "//" [^ '\n']* '\n'
@@ -88,10 +88,10 @@ rule get_token = parse
     let content = String.sub s 1 (String.length s - 2) in
     STRING_CONST content
   }
-  | float as f
+  | float as f ('f'|'F')
       {
         try
-          FLOAT_CONST (float_of_string f)
+          FLOAT_CONST (Float.of_string f)
         with Failure _ ->
           raise (Error "Invalid float constant")
       }
