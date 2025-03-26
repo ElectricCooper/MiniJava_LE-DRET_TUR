@@ -58,34 +58,42 @@ let clookup : identifier -> class_env -> class_type = lookup "class"
 let rec compatible (typ1 : typ) (typ2 : typ) (instanceof : identifier -> identifier -> bool) : bool =
   match typ1, typ2 with
   | TypInt, TypInt
+  | TypString, TypString
   | TypFloat, TypFloat
   | TypBool, TypBool
   | TypIntArray, TypIntArray -> true
+  | TypStringArray, TypStringArray -> true
   | Typ t1, Typ t2 -> instanceof t1 t2
   | _, _ -> false
 
 (** [typ_lmj_to_tmj t] converts the [LMJ] type [t] into the equivalent [TMJ] type. *)
 let rec type_lmj_to_tmj = function
   | TypInt      -> TMJ.TypInt
+  | TypString   -> TMJ.TypString
   | TypFloat    -> TMJ.TypFloat
   | TypBool     -> TMJ.TypBool
   | TypIntArray -> TMJ.TypIntArray
+  | TypStringArray -> TMJ.TypStringArray
   | Typ id      -> TMJ.Typ (Location.content id)
 
 (** [typ_tmj_to_lmj s e t] converts the [TMJ] type [t] into the equivalent [LMJ] type using location starting position [s] and location ending position [e]. *)
 let rec type_tmj_to_lmj startpos endpos = function
 | TMJ.TypInt      -> TypInt
+| TMJ.TypString  -> TypString
 | TMJ.TypFloat    -> TypFloat
 | TMJ.TypBool     -> TypBool
 | TMJ.TypIntArray -> TypIntArray
+| TMJ.TypStringArray -> TypStringArray
 | TMJ.Typ id      -> Typ (Location.make startpos endpos id)
 
 (** [tmj_type_to_string t] converts the [TMJ] type [t] into a string representation. *)
 let rec tmj_type_to_string : TMJ.typ -> string = function
   | TMJ.TypInt -> "integer"
+  | TMJ.TypString -> "string"
   | TMJ.TypFloat -> "float"
   | TMJ.TypBool -> "boolean"
   | TMJ.TypIntArray -> "int[]"
+  | TMJ.TypStringArray -> "string[]"
   | TMJ.Typ t -> t
 
 (** [type_to_string t] converts the [LMJ] type [t] into a string representation. *)
@@ -154,6 +162,12 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
 
   | EConst (ConstInt i) ->
       mke (TMJ.EConst (ConstInt i)) TypInt
+  
+  | EConst (ConstString s) ->
+      mke (TMJ.EConst (ConstString s)) TypString
+      
+  | EConst (ConstFloat f) ->
+    mke (TMJ.EConst (ConstFloat f)) TypFloat
 
   | EConst (ConstFloat f) ->
     mke (TMJ.EConst (ConstFloat f)) TypFloat
@@ -183,19 +197,17 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
               else if e1'.typ = TypFloat && e2'.typ = TypFloat then TypFloat, TypFloat
               else if e1'.typ = TypBool && e2'.typ = TypBool then TypBool, TypBool
               else error e1 (sprintf "Type mismatch: `==` must be used with two ints or two booleans")
-        | OpAdd | OpSub | OpDiv | OpMul -> 
-          if (e1'.typ = TypInt && e2'.typ = TypInt) then TypInt, TypInt
-          else if (e1'.typ = TypFloat && e2'.typ = TypFloat) then TypFloat, TypFloat
-          else if (e1'.typ = TypInt && e2'.typ = TypFloat) || (e1'.typ = TypFloat && e2'.typ = TypInt) then 
-            TypFloat, TypFloat (* If one operand is float, result is float *)
-          else error e1 (sprintf "Type mismatch: arithmetic operators must be used with ints or floats")
-          | OpLt | OpGt ->
-            if (e1'.typ = TypInt && e2'.typ = TypInt) then TypBool, TypBool 
-            else if (e1'.typ = TypFloat && e2'.typ = TypFloat) then TypFloat, TypBool
-            else error e1 (sprintf "Type mismatch: comparison operators must be used with two ints or two floats")
-          | OpOr | OpAnd ->
-            if e1'.typ = TypBool && e2'.typ = TypBool then TypBool, TypBool
-            else error e1 (sprintf "Type mismatch: logical operators must be used with two booleans")
+        | OpAdd -> 
+          if e1'.typ = TypString && e2'.typ = TypString then TypString, TypString
+          else if e1'.typ = TypInt && e2'.typ = TypInt then TypInt, TypInt
+          else error e1 (sprintf "Type mismatch: `+` must be used with two ints or two strings")
+        | OpSub
+        | OpDiv -> TypInt, TypInt
+        | OpMul -> TypInt, TypInt
+        | OpLt  -> TypInt, TypBool
+        | OpGt  -> TypInt, TypBool
+        | OpOr -> TypBool, TypBool
+        | OpAnd -> TypBool, TypBool
 
       in
       let e1' = typecheck_expression_expecting cenv venv vinit instanceof expected e1 in
@@ -213,6 +225,10 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
   | EArrayAlloc elength ->
       let elength' = typecheck_expression_expecting cenv venv vinit instanceof TypInt elength in
       mke (TMJ.EArrayAlloc elength') TypIntArray
+  
+  | EStringArrayAlloc estringlength ->
+    let estringlength' = typecheck_expression_expecting cenv venv vinit instanceof TypString estringlength in
+    mke (TMJ.EArrayAlloc estringlength') TypStringArray
 
   | EArrayLength earray ->
       let earray' = typecheck_expression_expecting cenv venv vinit instanceof TypIntArray earray in
@@ -313,7 +329,7 @@ let rec typecheck_instruction (cenv : class_env) (venv : variable_env) (vinit : 
   | ISyso e ->
     let e' = typecheck_expression cenv venv vinit instanceof e in
     (match e'.typ with
-      | TypInt | TypBool -> (TMJ.ISyso e', vinit)
+      | TypInt | TypBool | TypString -> (TMJ.ISyso e', vinit)
       |_-> failwith "Cannot print that")
 
 

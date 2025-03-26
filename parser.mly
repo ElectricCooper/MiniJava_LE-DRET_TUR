@@ -4,6 +4,7 @@
 %}
 
 %token <int32> INT_CONST
+%token <string> STRING_CONST
 %token <bool> BOOL_CONST
 %token <float> FLOAT_CONST
 %token INTEGER BOOLEAN FLOAT
@@ -52,10 +53,10 @@ main_class:
    LBRACE
    PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET a = IDENT RPAREN
    LBRACE
-   i = instruction
+   i = list(instruction)
    RBRACE
    RBRACE
-   { (c, a, i) }
+   { (c, a, IBlock i) }
 
 defs:
 | c = list(clas)
@@ -103,6 +104,11 @@ declarations_and_statements:
      let d, s = r in
      ((id, t) :: d, s)
    }
+| t = typ id = IDENT ASSIGN e = expression SEMICOLON r = declarations_and_statements
+   {
+     let d, s = r in
+     ((id, t) :: d, ISetVar(id, e) :: s)
+   }
 | s = list(instruction)
    { ([], s) }
 
@@ -115,6 +121,9 @@ expression:
 raw_expression:
 | i = INT_CONST
    { EConst (ConstInt i) }
+
+| s = STRING_CONST
+   { EConst (ConstString s)}
 
 | b = BOOL_CONST
    { EConst (ConstBool b) }
@@ -133,6 +142,9 @@ raw_expression:
 
 | NEW INTEGER LBRACKET e = expression RBRACKET
    { EArrayAlloc e }
+
+| NEW STRING LBRACKET e = expression RBRACKET
+  { EStringArrayAlloc e }
 
 | a = expression DOT LENGTH
    { EArrayLength a }
@@ -198,11 +210,15 @@ block:
 typ:
 | INTEGER
    { TypInt }
+| STRING
+   { TypString }
 | FLOAT
    { TypFloat }
 | BOOLEAN
    { TypBool }
 | INTEGER LBRACKET RBRACKET
    { TypIntArray }
+| STRING LBRACKET RBRACKET
+   { TypStringArray }
 | id = IDENT
    { Typ id }

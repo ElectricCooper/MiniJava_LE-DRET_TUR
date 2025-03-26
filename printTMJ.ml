@@ -183,12 +183,16 @@ let rec instr out = function
 let typ out = function
   | TypInt ->
      fprintf out "int"
+  | TypString ->
+      fprintf out "string"
   | TypFloat ->
      fprintf out "float"
   | TypBool ->
      fprintf out "boolean"
   | TypIntArray ->
      fprintf out "int[]"
+  | TypStringArray ->
+     fprintf out "string[]"
   | Typ id ->
      fprintf out "%s"
        id

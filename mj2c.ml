@@ -289,6 +289,7 @@ let constant2c
   | ConstBool true  -> fprintf out "1"
   | ConstBool false -> fprintf out "0"
   | ConstInt i      -> fprintf out "%ld" i
+  | ConstString s   -> fprintf out "\"%s\"" s
 
 (** [binop2c out op] transpiles the binary operator [op] to C on the output channel [out]. *)
 let binop2c
@@ -314,8 +315,10 @@ let type2c
     : unit =
   match typ with
   | TypInt -> fprintf out "int"
+  | TypString -> fprintf out "char*"
   | TypBool -> fprintf out "int"
   | TypIntArray -> fprintf out "struct %s*" !struct_array_name
+  | TypStringArray -> fprintf  out "struct %s*" !struct_array_name
   | Typ t -> fprintf out "struct %s*" t
 
 (** [cast out typ] transpiles the cast to [typ] to C on the output channel [out]. *)
@@ -426,12 +429,25 @@ let expr2c
     | EUnOp (UOpNot, e) ->
        fprintf out "!(%a)"
          expr2c e
-
+         
     | EBinOp (op, e1, e2) ->
-       fprintf out "(%a %a %a)"
-         expr2c e1
-         binop2c op
-         expr2c e2
+    if op = OpAdd && e1.typ = TypString && e2.typ = TypString then
+      (* String concatenation *)
+      fprintf out "({ char* %s = %a; char* %s = %a; \
+                    char* result = malloc(strlen(%s) + strlen(%s) + 1); \
+                    strcpy(result, %s); \
+                    strcat(result, %s); \
+                    result; })"
+        !name1 expr2c e1
+        !name2 expr2c e2
+        !name1 !name2
+        !name1
+        !name2
+    else
+      fprintf out "(%a %a %a)"
+        expr2c e1
+        binop2c op
+        expr2c e2
   in
   expr2c out expr
 
@@ -505,6 +521,8 @@ let instr2c
 
     | ISyso e -> match e.typ with
       | TypInt -> fprintf out "printf(\"%%d\\n\", %a);"
+         (expr2c method_name class_info) e
+      | TypString -> fprintf out "printf(\"%%s\\n\", %a);" 
          (expr2c method_name class_info) e
       | TypBool -> fprintf out "if(%a) printf(\"true\\n\"); else printf(\"false\\n\"); " (expr2c method_name class_info) e
       |_-> failwith "Cannot print that"

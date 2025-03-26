@@ -22,7 +22,18 @@ class My_Test {
 
         // System.out.println(new TestDoWhile().run());
 
-        System.out.println(new TestFloat().run());
+        System.out.println(new TestString().run());
+
+        //System.out.println(new TestFloat().run());
+    }
+}
+
+class TestString{
+    public string run() {
+        string s1 = "Hello ";
+        string s2 = "World";
+        string s = s1 + s2;
+        return s;
     }
 }
 

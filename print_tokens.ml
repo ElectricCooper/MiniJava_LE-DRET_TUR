@@ -18,6 +18,8 @@ let print_token show_loc out = function
      fprintf out "BOOL_CONST %s%s%s" lquote (string_of_bool b) rquote
   | INTEGER ->
      fprintf out "INTEGER"
+  |STRING ->
+      fprintf out "STRING"
   | FLOAT ->
      fprintf out "FLOAT"
   | BOOLEAN ->
