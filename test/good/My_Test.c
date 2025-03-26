@@ -52,10 +52,13 @@ void* TestFor_run(struct TestFor* this) {
   return (void*)(0);
 }
 void* TestFloat_run(struct TestFloat* this) {
-  float i;
-  i = 5.400000;
-  printf("%f\n", 3.556756);
-  printf("%f\n", i);
+  float f1;
+  float f2;
+  float f;
+  f1 = 6.800000;
+  f2 = 2.400000;
+  f = (f1 * f2);
+  if((f1 > f2)) printf("true\n"); else printf("false\n"); 
   return (void*)(0);
 }
 void* TestWhile_run(struct TestWhile* this) {
