@@ -94,14 +94,17 @@ make
 [X] For
 [X] Type String
 [X] Concatenation of two String objects
-[X] Type float
+[X] Type float with operations
 [X] Multiple instructions in main
 [X] Declaration and initialization at the same time
-[X] Operations for float
+[ ] Operator modulus ( % )
 
 [ ] If _ Then _ Else
 [ ] Declaration in main
 [ ] Declaration of an object in a block
 [ ] Bit operators ( &, |, ^, ~, )
 [ ] Break
-[ ] Operator modulus ( % )
+
+### Added Test Files
+- DivisionOperator
+- For

@@ -15,7 +15,7 @@ let constant out = function
 
 (** [binop out op] prints the binary operator [op] on the output channel [out]. *)
 let binop out = function
-   | OpEq ->
+  | OpEq ->
      fprintf out "=="
   | OpAdd ->
      fprintf out "+"
@@ -23,6 +23,8 @@ let binop out = function
      fprintf out "-"
   | OpDiv ->
    fprintf out "/"
+  | OpMod ->
+   fprintf out "%"
   | OpMul ->
      fprintf out "*"
   | OpLt  ->
@@ -149,24 +151,11 @@ let rec instr out = function
         expr c
         instr i
    | IFor (init_opt, cond, incr_opt, body) ->
-   fprintf out "for (%a; %a; %a) %a"
-   (fun out -> function
-      | Some (e1, e2) ->
-         fprintf out "%a = %a"
-         (expr2c method_name class_info) e1
-         (expr2c method_name class_info) e2
-      | None -> fprintf out "") init_opt
-   (expr2c method_name class_info) cond
-   (fun out -> function
-      | Some (e1, e2) ->
-         fprintf out "%a = %a"
-         (expr2c method_name class_info) e1
-         (expr2c method_name class_info) e2
-      | None -> fprintf out "") incr_opt
-
-   (fun out b ->
-      let f = instr2c method_name class_info in
-      f out b) body
+      fprintf out "for (%a; %a; %a) %a"
+         instr init_opt
+         expr cond
+         instr incr_opt
+         instr body
    | IDoWhile (i, c) ->
    fprintf out "do %a while (%a)"
       instr i

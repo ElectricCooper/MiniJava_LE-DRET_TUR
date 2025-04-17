@@ -81,6 +81,8 @@ let print_binop out = function
      fprintf out "OpSub"
   | OpDiv ->
     fprintf out "OpDiv"
+  | OpMod ->
+    fprintf out "OpMod"
   | OpMul ->
      fprintf out "OpMul"
   | OpLt  ->
@@ -218,28 +220,20 @@ let rec print_instruction prefix out i =
        branch_end
        (print_instruction prefix') i
        
-  | IFor (init_opt, cond, incr_opt, body) ->
-  fprintf out "IFor\n%s%s%a\n%s%s%a\n%s%s%a\n%s%s%a"
-    prefix'
-    branch
-    (fun out -> function
-      | Some (e1, e2) -> fprintf out "Init: %a = %a"
-        (print_expression (prefix' ^ pipe)) e1
-        (print_expression (prefix' ^ pipe)) e2
-      | None -> fprintf out "Init: None") init_opt
-    prefix'
-    branch
-    (print_expression (prefix' ^ pipe)) cond
-    prefix'
-    branch
-    (fun out -> function
-      | Some (e1, e2) -> fprintf out "Incr: %a = %a"
-        (print_expression (prefix' ^ pipe)) e1
-        (print_expression (prefix' ^ pipe)) e2
-      | None -> fprintf out "Incr: None") incr_opt
-    prefix'
-    branch_end
-    (print_instruction prefix') body
+  | IFor (i1, e, i2, i3) ->
+    fprintf out "IFor\n%s%s%a\n%s%s%a\n%s%s%a\n%s%s%a"
+      prefix'
+      branch
+      (print_instruction (prefix' ^ pipe )) i1
+      prefix'
+      branch
+      (print_expression (prefix' ^ pipe)) e
+      prefix'
+      branch
+      (print_instruction (prefix' ^ pipe )) i2
+      prefix'
+      branch_end
+      (print_instruction prefix') i3
 
   | IDoWhile (i, e) ->
   fprintf out "IDoWhile\n%s%s%a\n%s%s%a"

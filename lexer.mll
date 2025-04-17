@@ -34,6 +34,7 @@ rule get_token = parse
   | '+'       { PLUS }
   | '-'       { MINUS }
   | '/'       { DIV }
+  | '%'       { MOD }
   | '*'       { TIMES }
   | "||"      { OR }
   | "&&"      { AND }

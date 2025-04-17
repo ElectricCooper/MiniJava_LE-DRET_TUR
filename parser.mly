@@ -10,7 +10,7 @@
 %token INTEGER BOOLEAN FLOAT
 %token <string Location.t> IDENT
 %token CLASS PUBLIC STATIC VOID MAIN STRING EXTENDS RETURN
-%token PLUS MINUS TIMES DIV NOT LT OR AND GT EQUALS
+%token PLUS MINUS TIMES DIV NOT LT OR AND GT EQUALS MOD
 %token COMMA SEMICOLON
 %token ASSIGN
 %token LPAREN RPAREN LBRACKET RBRACKET LBRACE RBRACE
@@ -26,7 +26,7 @@
 %left AND
 %nonassoc LT GT
 %left PLUS MINUS
-%left TIMES DIV
+%left TIMES DIV MOD
 %nonassoc NOT
 %nonassoc DOT LBRACKET
 
@@ -166,6 +166,7 @@ raw_expression:
 | PLUS  { OpAdd }
 | MINUS { OpSub }
 | DIV   { OpDiv }
+| MOD   { OpMod }
 | TIMES { OpMul }
 | LT    { OpLt }
 | GT    { OpGt }
@@ -197,11 +198,8 @@ instruction:
 | WHILE LPAREN c = expression RPAREN i = instruction
    { IWhile (c, i) }
 
-| FOR LPAREN init = option(expr_pair) SEMICOLON
-            cond = expression SEMICOLON 
-            incr = option(expr_pair) RPAREN 
-            body = instruction
-    { IFor(init, cond, incr, body) }
+| FOR LPAREN id1 = IDENT ASSIGN e1 = expression SEMICOLON c = expression SEMICOLON id2 = IDENT ASSIGN e2 = expression RPAREN i3 = instruction
+    { IFor (ISetVar (id1, e1), c, ISetVar (id2, e2), i3) }
 
 | DO i = instruction WHILE LPAREN c = expression RPAREN SEMICOLON
    { IDoWhile (i, c) }

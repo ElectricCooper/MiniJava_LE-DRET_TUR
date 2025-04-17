@@ -28,6 +28,7 @@ and binop = LMJ.binop =
   | OpAdd
   | OpSub
   | OpDiv
+  | OpMod
   | OpMul
   | OpLt
   | OpGt  
@@ -42,7 +43,7 @@ and instruction =
   | IIf of expression * instruction * instruction
   | IIfS of expression * instruction
   | IWhile of expression * instruction
-  | IFor of (expression*expression) option * expression * (expression * expression) option * instruction
+  | IFor of instruction * expression * instruction * instruction
   | IDoWhile of instruction * expression
   | ISyso of expression
   | ISetVar of identifier * typ * expression

@@ -34,6 +34,7 @@ and binop =
   | OpAdd (** Binary operator [+]. *)
   | OpSub (** Binary operator [-]. *)
   | OpDiv (** Binary operator [/]. *)
+  | OpMod (** Binary operator [%]. *)
   | OpMul (** Binary operator [*]. *)
   | OpLt  (** Binary operator [<]. *)
   | OpGt  (** Binary operator [>]. *)  
@@ -48,8 +49,7 @@ and instruction =
   | IIf of expression * instruction * instruction (** [IIf (e, i1, i2)] represents the instruction [if (e) i1 else i2]. *)
   | IIfS of expression * instruction (** [IIfS (e, i)] represents the instruction [if (e) i ]. *)
   | IWhile of expression * instruction (** [IWhile (e, ins)] represents the instruction [while (e) ins]. *)
-  | IFor of (expression*expression) option * expression * (expression * expression) option * instruction
-(** [IFor (init, cond, incr, body)] represents [for (init; cond; incr) body] *)
+  | IFor of instruction * expression * instruction * instruction (** [IFor (init, cond, incr, body)] represents [for (init; cond; incr) body] *)
   | IDoWhile of instruction * expression (** [IDoWhile (ins, e)] represents the instruction [do ins while (e)]. *)
   | ISyso of expression (** [ISyso e] represents the instruction [System.out.println(e);]. *)
   | ISetVar of identifier * expression (** [ISetVar (id, e)] represents the instruction [id = e;]. *)

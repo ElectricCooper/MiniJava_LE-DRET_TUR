@@ -302,6 +302,7 @@ let binop2c
   | OpAdd -> fprintf out "+"
   | OpSub -> fprintf out "-"
   | OpDiv -> fprintf out "/"
+  | OpMod -> fprintf out "%%"
   | OpMul -> fprintf out "*"
   | OpLt  -> fprintf out "<"
   | OpGt  -> fprintf out ">"  
@@ -505,21 +506,12 @@ let instr2c
          instr2c i
          
     | IFor (init_opt, cond, incr_opt, body) ->
-    fprintf out "for (%a; %a; %a) %a"
-    (fun out -> function
-      | Some (e1, e2) ->
-          fprintf out "%a = %a"
-          (fun out e -> expr2c method_name class_info out e) e1
-          (fun out e -> expr2c method_name class_info out e) e2
-      | None -> fprintf out "") init_opt
-    (fun out c -> expr2c method_name class_info out c) cond
-    (fun out -> function
-      | Some (e1, e2) ->
-          fprintf out "%a = %a"
-          (fun out e -> expr2c method_name class_info out e) e1
-          (fun out e -> expr2c method_name class_info out e) e2
-      | None -> fprintf out "") incr_opt
-    (fun out b -> instr2c out b) body
+      fprintf out "for (%a %a; ({ %a })) %a"
+        instr2c init_opt
+        (expr2c method_name class_info) cond
+        instr2c incr_opt
+        instr2c body
+    
 
     | IDoWhile (i, c) ->
     fprintf out "do %a while (%a);"
