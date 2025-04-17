@@ -102,4 +102,6 @@ make
 [ ] If _ Then _ Else
 [ ] Declaration in main
 [ ] Declaration of an object in a block
-
+[ ] Bit operators ( &, |, ^, ~, )
+[ ] Break
+[ ] Operator modulus ( % )
