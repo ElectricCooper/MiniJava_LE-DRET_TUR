@@ -290,7 +290,7 @@ let constant2c
   | ConstBool false -> fprintf out "0"
   | ConstInt i      -> fprintf out "%ld" i
   | ConstString s   -> fprintf out "\"%s\"" s
-  | ConstFloat f    -> fprintf out "%f" f
+  | ConstFloat f    -> fprintf out "%ff" f
 
 (** [binop2c out op] transpiles the binary operator [op] to C on the output channel [out]. *)
 let binop2c
@@ -376,6 +376,16 @@ let expr2c
        let class_info = get_class_info clas in
        let index = ClassInfo.vtable_index callee class_info in
        let typ = ClassInfo.return_type callee class_info in
+       if typ == TypFloat then
+        fprintf out "({ struct %s* %s = %a; int i_val = (int)%s->vtable[%d](%s%a); float f_val; *((int*)&f_val) = i_val; f_val; })"
+        clas
+        !name1
+        expr2c o
+        !name1
+        index
+        !name1
+        (prec_list comma expr2c) args
+       else
        fprintf out "({ struct %s* %s = %a; %a %s->vtable[%d](%s%a); })"
          clas
          !name1
@@ -602,8 +612,13 @@ let method_definition2c
   let class_info = get_class_info class_name in
   let method_definition out (method_name, m) =
     let return2c out e =
-      fprintf out "return (void*)(%a);"
-        (expr2c method_name class_info) e
+      match e.typ with
+      | TypFloat ->
+        fprintf out "{ float f_val = %a; int* i_ptr = (int*)&f_val; return (void*)(*i_ptr); }"
+          (expr2c method_name class_info) e
+      | _ ->
+        fprintf out "return (void*)(%a);"
+          (expr2c method_name class_info) e
     in
     fprintf out "void* %s_%s(struct %s* this%a) {%a%a%a\n}"
       class_name
