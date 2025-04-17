@@ -107,6 +107,7 @@ make
 
 ### Added Test Files
 - DivisionOperator
+- DoWhile
 - For
 - StandaloneIf
 - While
