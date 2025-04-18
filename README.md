@@ -96,7 +96,7 @@ make
 [X] Concatenation of two String objects
 [X] Type float with operations
 [X] Multiple instructions in main
-[ ] Declaration and initialization at the same time
+[X] Declaration and initialization at the same time
 [ ] Operator modulus ( % )
 
 [ ] If _ Then _ Else

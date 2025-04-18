@@ -1,4 +1,4 @@
-public class DeclarationInitialization {
+class DeclarationInitialization {
     public static void main(String[] args) {
         System.out.println(new DeclarationInitializationTest().declare());
     }
