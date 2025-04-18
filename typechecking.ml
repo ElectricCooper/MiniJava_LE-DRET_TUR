@@ -204,7 +204,7 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
         else if e1'.typ = TypFloat && e2'.typ = TypFloat then TypFloat, TypFloat
         else error e1 (sprintf "Type mismatch: `-`,`/`,`*`  must be used with two ints or two floats")
         | OpMod -> if e1'.typ = TypInt && e2'.typ = TypInt then TypInt, TypInt 
-        else error e1 (sprintf "Type mismatch: `%` must be used with two ints")
+        else error e1 (sprintf "Type mismatch: `%%` must be used with two ints")
         | OpLt  
         | OpGt  -> if e1'.typ = TypInt && e2'.typ = TypInt then TypInt, TypBool
         else if e1'.typ = TypFloat && e2'.typ = TypFloat then TypFloat, TypBool
@@ -251,6 +251,7 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
     If [typecheck_instruction] succeeds, the new set of initialized variables is returned. *)
 let rec typecheck_instruction (cenv : class_env) (venv : variable_env) (vinit : S.t)
     (instanceof : identifier -> identifier -> bool)
+    (breakable : bool)
     (inst : instruction) : (TMJ.instruction * S.t) =
   match inst with
   | ISetVar (v, e) ->
@@ -273,7 +274,7 @@ let rec typecheck_instruction (cenv : class_env) (venv : variable_env) (vinit : 
       let instructions', vinit =
         List.fold_left
           (fun (acc, vinit) inst ->
-          let inst, vinit = typecheck_instruction cenv venv vinit instanceof inst in
+          let inst, vinit = typecheck_instruction cenv venv vinit instanceof breakable inst in
           (inst :: acc, vinit))
         ([], vinit)
         instructions
@@ -283,32 +284,32 @@ let rec typecheck_instruction (cenv : class_env) (venv : variable_env) (vinit : 
   | IIf (cond, ithen, ielse) ->
       let cond' = typecheck_expression_expecting cenv venv vinit instanceof TypBool cond in
       let ithen', vinit1 =
-        typecheck_instruction cenv venv vinit instanceof ithen
+        typecheck_instruction cenv venv vinit instanceof breakable ithen
       in
       let ielse', vinit2 =
-        typecheck_instruction cenv venv vinit instanceof ielse
+        typecheck_instruction cenv venv vinit instanceof breakable ielse
       in
       (TMJ.IIf (cond', ithen', ielse'), S.inter vinit1 vinit2)
 
   | IIfS (cond, ithen) ->
       let cond' = typecheck_expression_expecting cenv venv vinit instanceof TypBool cond in
-      let ithen', vinit1 = typecheck_instruction cenv venv vinit instanceof ithen in
+      let ithen', vinit1 = typecheck_instruction cenv venv vinit instanceof breakable ithen in
       (TMJ.IIfS (cond', ithen'), vinit1)
 
   | IWhile (cond, ibody) ->
       let cond' = typecheck_expression_expecting cenv venv vinit instanceof TypBool cond in
-      let ibody', vinit = typecheck_instruction cenv venv vinit instanceof ibody in
+      let ibody', vinit = typecheck_instruction cenv venv vinit instanceof true ibody in
       (TMJ.IWhile (cond', ibody'), vinit)
 
   | IFor (init_opt, cond, incr_opt, ibody) ->
-    let init_opt', vinit = typecheck_instruction cenv venv vinit instanceof init_opt in
+    let init_opt', vinit = typecheck_instruction cenv venv vinit instanceof breakable init_opt in
     let c = typecheck_expression_expecting cenv venv vinit instanceof TypBool cond in
-    let incr_opt', vinit = typecheck_instruction cenv venv vinit instanceof incr_opt in
-    let ibody', vinit = typecheck_instruction cenv venv vinit instanceof ibody in
+    let incr_opt', vinit = typecheck_instruction cenv venv vinit instanceof breakable incr_opt in
+    let ibody', vinit = typecheck_instruction cenv venv vinit instanceof true ibody in
         (TMJ.IFor (init_opt', c, incr_opt', ibody'), vinit)
 
   | IDoWhile (ibody, cond) ->
-    let ibody', vinit = typecheck_instruction cenv venv vinit instanceof ibody in
+    let ibody', vinit = typecheck_instruction cenv venv vinit instanceof true ibody in
     let cond' = typecheck_expression_expecting cenv venv vinit instanceof TypBool cond in
     (TMJ.IDoWhile (ibody', cond'), vinit)
 
@@ -317,7 +318,13 @@ let rec typecheck_instruction (cenv : class_env) (venv : variable_env) (vinit : 
     (match e'.typ with
       | TypInt | TypBool | TypString | TypFloat -> (TMJ.ISyso e', vinit)
       |_-> failwith "Cannot print that")
-
+      
+  | IBreak ->
+    if not breakable then
+      let pos = Location.make (Lexing.dummy_pos) (Lexing.dummy_pos) "break" in
+      error pos (sprintf "break statement can only be used inside a loop")
+    else
+      (TMJ.IBreak, vinit)
 
 
 (** [occurences x bindings] returns the elements in [bindings] that have [x] has identifier. *)
@@ -376,7 +383,7 @@ let typecheck_method (cenv : class_env) (venv : variable_env)
     S.diff (SM.domain venv) (SM.domain mlocals)
   in
   let body', vinit =
-    match typecheck_instruction cenv venv vinit instanceof (IBlock m.body) with 
+    match typecheck_instruction cenv venv vinit instanceof false (IBlock m.body) with 
     | IBlock body', vinit -> body', vinit 
     | _ -> assert false
   in
@@ -526,6 +533,6 @@ let typecheck_program (p : program) : TMJ.program =
     name = Location.content p.name;
     defs = defs';
     main_args = Location.content p.main_args;
-    main      = fst (typecheck_instruction cenv venv S.empty instanceof p.main)
+    main      = fst (typecheck_instruction cenv venv S.empty instanceof false p.main)
   }
   

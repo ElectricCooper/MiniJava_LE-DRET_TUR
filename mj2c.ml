@@ -523,7 +523,7 @@ let instr2c
          (indent indentation (sep_list nl instr2c)) is
          nl
 
-    | ISyso e -> match e.typ with
+    | ISyso e -> (match e.typ with
       | TypInt -> fprintf out "printf(\"%%d\\n\", %a);"
          (expr2c method_name class_info) e
       | TypString -> fprintf out "printf(\"%%s\\n\", %a);" 
@@ -531,7 +531,11 @@ let instr2c
       | TypBool -> fprintf out "if(%a) printf(\"true\\n\"); else printf(\"false\\n\"); " (expr2c method_name class_info) e
       | TypFloat -> fprintf out "printf(\"%%f\\n\", %a);"
       (expr2c method_name class_info) e
-      |_-> failwith "Cannot print that"
+      |_-> failwith "Cannot print that")
+
+    | IBreak ->
+       fprintf out "break;"
+
   in
   instr2c out ins
 

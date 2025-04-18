@@ -64,6 +64,7 @@ rule get_token = parse
   | "void"    { VOID }
   | "main"    { MAIN }
   | "return"  { RETURN }
+  | "break"   { BREAK }
   | "String"  { STRING }
   | "extends" { EXTENDS }
   | "new"     { NEW }

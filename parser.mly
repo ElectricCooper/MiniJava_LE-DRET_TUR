@@ -9,7 +9,7 @@
 %token <float> FLOAT_CONST
 %token INTEGER BOOLEAN FLOAT
 %token <string Location.t> IDENT
-%token CLASS PUBLIC STATIC VOID MAIN STRING EXTENDS RETURN
+%token CLASS PUBLIC STATIC VOID MAIN STRING EXTENDS RETURN BREAK
 %token PLUS MINUS TIMES DIV NOT LT OR AND GT EQUALS MOD
 %token COMMA SEMICOLON
 %token ASSIGN
@@ -203,6 +203,9 @@ instruction:
 
 | DO i = instruction WHILE LPAREN c = expression RPAREN SEMICOLON
    { IDoWhile (i, c) }
+
+| BREAK SEMICOLON
+   { IBreak }
 
 block:
 | LBRACE is = list(instruction) RBRACE

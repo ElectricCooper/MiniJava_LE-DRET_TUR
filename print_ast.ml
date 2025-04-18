@@ -65,6 +65,8 @@ let print_constant out = function
      fprintf out "ConstInt %ld" i
   | ConstString s ->
     fprintf out "ConstString %s" s
+  | ConstFloat f ->
+    fprintf out "ConstFloat %f" f
 
 (** [print_unop out op] prints the unary operator [op] on the output channel [out]. *)
 let print_unop out = function
@@ -161,6 +163,13 @@ and print_raw_expression prefix out e pos =
        prefix'
        branch_end
        (print_expression prefix') e
+  | EStringArrayAlloc e ->
+  fprintf out "EStringArrayAlloc";
+  print_position out pos;
+  fprintf out "\n%s%s%a"
+    prefix'
+    branch_end
+    (print_expression prefix') e
   | EArrayLength e ->
      fprintf out "EArrayLength";
      print_position out pos;
@@ -262,6 +271,8 @@ let rec print_instruction prefix out i =
        prefix'
        branch_end
        (print_expression prefix') e2
+  | IBreak ->
+    fprintf out "IBreak"
 
 (** [print_instruction_list prefix out l] prints the list of instructions [l] on the output channel [out].
     [prefix] is the current prefix string, but currently the position in the output channel [out] is
@@ -278,6 +289,8 @@ let print_type out typ =
      fprintf out "string"
   | TypBool ->
      fprintf out "bool"
+  | TypFloat ->
+    fprintf out "float"
   | TypIntArray ->
      fprintf out "int[]"
   | TypStringArray ->
