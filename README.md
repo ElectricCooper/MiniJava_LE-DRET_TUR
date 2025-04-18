@@ -97,13 +97,14 @@ make
 [X] Type float with operations
 [X] Multiple instructions in main
 [X] Declaration and initialization at the same time
-[ ] Operator modulus ( % )
+[X] Operator modulus ( % )
+[X] Break
 
 [ ] If _ Then _ Else
 [ ] Declaration in main
 [ ] Declaration of an object in a block
 [ ] Bit operators ( &, |, ^, ~, )
-[ ] Break
+
 
 ### Added Test Files
 - DivisionOperator
