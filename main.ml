@@ -102,7 +102,7 @@ let () =
     Mj2c.program2c output tmj;
     close_out output;
     match
-      Unix.system(Printf.sprintf "%s %s -o %s -I%s %s/tgc.o"
+      Unix.system(Printf.sprintf "%s %s -o %s -I%s %s/tgc.o -Wno-xor-used-as-pow"
                     !cc !ofile (Filename.chop_extension !ifile) !tgc_path !tgc_path)
     with
     | Unix.WEXITED code -> exit code

@@ -99,12 +99,8 @@ make
 [X] Declaration and initialization at the same time
 [X] Operator modulus ( % )
 [X] Break
-
-[ ] If _ Then _ Else
-[ ] Declaration in main
-[ ] Declaration of an object in a block
-[ ] Bit operators ( &, |, ^, ~, )
-
+[X] Not equals operator ( != )
+[X] Bit operators ( &, |, ^, ~, <<, >>)
 
 ### Added Test Files
 - DivisionOperator
@@ -112,3 +108,5 @@ make
 - For
 - StandaloneIf
 - While
+- NotEquals
+- BitwiseOps

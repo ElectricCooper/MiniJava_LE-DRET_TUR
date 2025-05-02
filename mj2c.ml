@@ -308,6 +308,12 @@ let binop2c
   | OpGt  -> fprintf out ">"  
   | OpOr -> fprintf out "||"
   | OpAnd -> fprintf out "&&"
+  | OpNeq -> fprintf out "!="
+  | OpBitAnd -> fprintf out "&"
+  | OpBitOr  -> fprintf out "|"
+  | OpBitXor -> fprintf out "^"
+  | OpLShift -> fprintf out "<<"
+  | OpRShift -> fprintf out ">>"
 
 
 (** [type2c out typ] transpiles the type [typ] to C on the output channel [out]. *)
@@ -441,6 +447,10 @@ let expr2c
 
     | EUnOp (UOpNot, e) ->
        fprintf out "!(%a)"
+         expr2c e
+    
+    | EUnOp (UOpBitComp, e) ->
+       fprintf out "~(%a)"
          expr2c e
          
     | EBinOp (op, e1, e2) ->

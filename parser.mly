@@ -10,7 +10,7 @@
 %token INTEGER BOOLEAN FLOAT
 %token <string Location.t> IDENT
 %token CLASS PUBLIC STATIC VOID MAIN STRING EXTENDS RETURN BREAK
-%token PLUS MINUS TIMES DIV NOT LT OR AND GT EQUALS MOD
+%token PLUS MINUS TIMES DIV NOT LT OR AND GT EQUALS MOD NEQUALS BITAND BITOR BITXOR LSHIFT RSHIFT BITCOMP
 %token COMMA SEMICOLON
 %token ASSIGN
 %token LPAREN RPAREN LBRACKET RBRACKET LBRACE RBRACE
@@ -21,13 +21,18 @@
 
 %nonassoc NOELSE
 %nonassoc ELSE 
-%left EQUALS
+%left EQUALS NEQUALS
 %left OR
 %left AND
+%nonassoc BITOR
+%nonassoc BITXOR
+%nonassoc BITAND
 %nonassoc LT GT
+%nonassoc LSHIFT RSHIFT
 %left PLUS MINUS
 %left TIMES DIV MOD
-%nonassoc NOT
+
+%nonassoc NOT BITCOMP
 %nonassoc DOT LBRACKET
 
 %start program
@@ -160,6 +165,8 @@ raw_expression:
 
 | NOT e = expression
    { EUnOp (UOpNot, e) }
+| BITCOMP e = expression
+   { EUnOp (UOpBitComp, e) }
 
 %inline binop:
 | EQUALS { OpEq }
@@ -172,6 +179,12 @@ raw_expression:
 | GT    { OpGt }
 | OR    { OpOr }
 | AND   { OpAnd }
+| NEQUALS { OpNeq }
+| BITAND { OpBitAnd }
+| BITOR  { OpBitOr }
+| BITXOR { OpBitXor }
+| LSHIFT { OpLShift }
+| RSHIFT { OpRShift }
 
 expr_pair:
   | e1 = expression ASSIGN e2 = expression { (e1, e2) }

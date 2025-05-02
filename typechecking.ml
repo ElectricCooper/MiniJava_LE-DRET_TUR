@@ -180,6 +180,7 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
       let expected, returned =
         match op with
         | UOpNot -> TypBool, TypBool
+        | UOpBitComp -> TypInt, TypInt
       in
       let e' = typecheck_expression_expecting cenv venv vinit instanceof expected e in
       mke (TMJ.EUnOp (op, e')) returned
@@ -189,12 +190,16 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
         let e2' = typecheck_expression cenv venv vinit instanceof e2 in
         let expected, returned =
           match op with
-          | OpEq -> (* Allow int, float and boolean *)
+        | OpEq  -> (* Allow int, float and boolean *)
               if e1'.typ = TypInt && e2'.typ = TypInt then TypInt, TypInt
               else if e1'.typ = TypFloat && e2'.typ = TypFloat then TypFloat, TypFloat
               else if e1'.typ = TypBool && e2'.typ = TypBool then TypBool, TypBool
               else error e1 (sprintf "Type mismatch: `==` must be used with two ints or two booleans")
-
+        | OpNeq -> (* Allow int, float and boolean *)
+              if e1'.typ = TypInt && e2'.typ = TypInt then TypInt, TypInt
+              else if e1'.typ = TypFloat && e2'.typ = TypFloat then TypFloat, TypFloat
+              else if e1'.typ = TypBool && e2'.typ = TypBool then TypBool, TypBool
+              else error e1 (sprintf "Type mismatch: `!=` must be used with two ints, two booleans or two floats")
         | OpAdd -> 
           if e1'.typ = TypString && e2'.typ = TypString then TypString, TypString
           else if e1'.typ = TypInt && e2'.typ = TypInt then TypInt, TypInt
@@ -212,6 +217,7 @@ and typecheck_expression (cenv : class_env) (venv : variable_env) (vinit : S.t)
 
         | OpOr -> TypBool, TypBool
         | OpAnd -> TypBool, TypBool
+        | OpBitAnd | OpBitOr | OpBitXor | OpLShift | OpRShift -> TypInt, TypInt
 
       in
       let e1' = typecheck_expression_expecting cenv venv vinit instanceof expected e1 in

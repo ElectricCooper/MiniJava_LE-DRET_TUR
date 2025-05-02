@@ -64,6 +64,8 @@ let print_token show_loc out = function
      fprintf out "TIMES"
   | NOT ->
      fprintf out "NOT"
+  | BITCOMP ->
+     fprintf out "BITCOMP" 
   | LT ->
      fprintf out "LT"
    | GT ->
@@ -112,6 +114,18 @@ let print_token show_loc out = function
      fprintf out "DO"
   | EOF ->
      fprintf out "EOF"
+  | BITAND ->
+     fprintf out "BITAND"
+  | BITOR ->
+     fprintf out "BITOR"
+  | BITXOR ->
+     fprintf out "BITXOR"
+  | LSHIFT ->
+     fprintf out "LSHIFT"
+  | RSHIFT ->
+     fprintf out "RSHIFT"
+  | NEQUALS ->
+     fprintf out "NEQ"
 
 let print out lexbuf show_loc =
   let token = ref (Lexer.get_token lexbuf) in
